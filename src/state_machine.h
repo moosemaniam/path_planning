@@ -10,6 +10,7 @@
 #include "spline.h"
 #include "path.h"
 #include "filter.h"
+#include "debug.h"
 
 
 typedef enum
@@ -107,6 +108,8 @@ NextAction::~NextAction()
 
 void NextAction::setVehicleVariables(const double s_car, const double d_car, const double speed_car, const int path_size)
 {
+
+  LOGD();
   car_s = s_car;
   car_d = d_car;
   car_speed = speed_car;
@@ -153,6 +156,7 @@ void NextAction::setVehicleVariables(const double s_car, const double d_car, con
   left_back.speed = NOMINAL_COST;
   right_back.distance_s = -NOMINAL_COST;
   right_back.speed = NOMINAL_COST;
+  LOGD();
 }
 
 double NextAction::getCost(const double object_speed, const double object_car_s){
@@ -160,6 +164,8 @@ double NextAction::getCost(const double object_speed, const double object_car_s)
 
   // velocity cost between this vehicle and the object speed
   double cost = std::abs(car_speed - object_speed) * relative_vel_cost;
+
+  LOGD();
   // velocity cost between the speed limit and the objects speed
   cost += std::abs(max_vel - object_speed) * max_vel_cost;
   // cost for the distance between this vehicle and the object
@@ -167,11 +173,14 @@ double NextAction::getCost(const double object_speed, const double object_car_s)
   // cost for the distance between this vehicle and the object 1 second in the future
   cost += (std::abs((object_car_s + object_speed) - (car_s + car_speed) + sensor_offset) / look_ahead_dist) * s_cost;
 
+  LOGD();
   return cost;
 }
 
 void NextAction::lookAround(const vector<vector<double>> &sensor_fusion)
 {
+
+  LOGD();
   for(int i=0; i < sensor_fusion.size(); i++){
     float d = sensor_fusion[i][6];
     double object_car_s = sensor_fusion[i][5];
@@ -235,12 +244,15 @@ void NextAction::lookAround(const vector<vector<double>> &sensor_fusion)
       }
     }
   }
+
+  LOGD();
 }
 
 
 double NextAction::followSpeed()
 {
   double ref_vel;
+  LOGD();
 
   /* If vehicle ahead isn't moving, we should stop */
   if(((center_front.speed <= 0.3) && (center_front.distance_s < 5)) || (center_front.distance_s < 5)){
@@ -255,6 +267,7 @@ double NextAction::followSpeed()
     ref_vel = center_front.speed; // slow down to the speed of the vehicle in front and follow it
   }
 
+  LOGD();
   return ref_vel;
 }
 
@@ -262,6 +275,7 @@ int NextAction::updateState(const vector<vector<double>> &sensor_fusion, double 
 {
   double left_cost, right_cost; // total left and right lane costs
 
+  LOGD();
   switch(state){
     case(KEEP_GOING):
       ref_vel = max_vel;
@@ -357,6 +371,7 @@ int NextAction::updateState(const vector<vector<double>> &sensor_fusion, double 
 
   state = state; // set the state for the next time around
 
+  LOGD();
   return lane;
 }
 

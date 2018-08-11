@@ -51,6 +51,9 @@
  The state machine is explained in this model.
  [image1]: ./images/statemachine.jpg
 
+Video of the simulator can be found at the below link
+youtu.be/b5252Db4WuY
+
 1) Every state looks around the surroundings of the car and updates the states based on the sensor data. Each object in the current lane or left or right lane is tracked. Cars which are a certain distance away are checked only, instead of all cars in the current lane.(path.h : 168)
 
 2) Costs

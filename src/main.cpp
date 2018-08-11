@@ -13,6 +13,7 @@
 #include "spline.h"
 #include "path.h"
 #include "state_machine.h"
+#include "debug.h"
 
 
 #define MAX_PREV_SIZE 10
@@ -126,20 +127,30 @@ int main() {
             }
           }
 
+          LOGD("*setVehicleVariables start");
           action.setVehicleVariables(car_s, car_d, car_speed, prev_size);
+          LOGD("*setVehicleVariables end");
           int lane = action.updateState(sensor_fusion, ref_vel, state);
 
+          LOGD("*path plannig code start");
           path car_path(car_x, car_y, car_yaw, car_s, lane, previous_path_x, previous_path_y, car_speed, prev_size);
 
+          LOGD("*path plannig code end");
+
+          LOGD("*path plannig spline start");
           car_path.makeSplinePts(map_waypoints_s, map_waypoints_x, map_waypoints_y);
 
+          LOGD("*path plannig spline end");
+          LOGD("*path plannig spline getSpline start");
           car_path.getSpline();
 
+          LOGD("*path plannig spline getSpline end");
           vector<double> next_x_vals;
           vector<double> next_y_vals;
 
-          // define a path made up of (x,y) points that the car will visit sequentially every .02 seconds
+          LOGD("*path plannig spline getPath start");
           car_path.getpathPts(next_x_vals, next_y_vals, ref_vel);
+          LOGD("*path plannig spline getPath end");
 
           msgJson["next_x"] = next_x_vals;
           msgJson["next_y"] = next_y_vals;

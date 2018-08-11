@@ -15,6 +15,7 @@
 #include "Eigen-3.3/Eigen/Core"
 #include "Eigen-3.3/Eigen/QR"
 #include "spline.h"
+#include "debug.h"
 
 using namespace std;
 
@@ -155,6 +156,8 @@ vector<double> path::get_frenet(double x, double y, double theta, const vector<d
     int next_wp = path::NextWaypoint(x,y, theta, maps_x,maps_y);
 
     int prev_wp;
+
+    LOGD();
     prev_wp = next_wp-1;
     if(next_wp == 0)
     {
@@ -193,6 +196,7 @@ vector<double> path::get_frenet(double x, double y, double theta, const vector<d
 
     frenet_s += path::distance(0,0,proj_x,proj_y);
 
+    LOGD();
     return {frenet_s,frenet_d};
 
 }
@@ -201,6 +205,8 @@ vector<double> path::get_frenet(double x, double y, double theta, const vector<d
 vector<double> path::getXY(double s, double d, const vector<double> &maps_s, const vector<double> &maps_x, const vector<double> &maps_y)
 {
 	int prev_wp = -1;
+
+  LOGD();
 
 	while(s > maps_s[prev_wp+1] && (prev_wp < (int)(maps_s.size()-1) ))
 	{
@@ -220,6 +226,7 @@ vector<double> path::getXY(double s, double d, const vector<double> &maps_s, con
 	double x = seg_x + d*cos(perp_heading);
 	double y = seg_y + d*sin(perp_heading);
 
+  LOGD();
 	return {x,y};
 
 }
@@ -340,6 +347,7 @@ void path::get_step(double &step, const double ref_vel,
   const double mile_to_meter = 0.44704;
   const double max_step = max_vel * mile_to_meter * 0.02;
   double ref_step = std::min<double>(ref_vel * mile_to_meter * 0.02, max_step);
+  LOGD();
 
   if((car_speed > ref_vel))
   {
@@ -374,6 +382,8 @@ void path::get_step(double &step, const double ref_vel,
 
   prev_x_local = x_local; // update the previous step points
   prev_y_local = y_local;
+
+  LOGD();
 }
 
 #endif /* TRAJECTORY_H */
