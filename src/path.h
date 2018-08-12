@@ -207,6 +207,7 @@ vector<double> path::getXY(double s, double d, const vector<double> &maps_s, con
 	int prev_wp = -1;
 
   LOGD();
+  LOGD("MAP size %d",maps_s.size());
 
 	while(s > maps_s[prev_wp+1] && (prev_wp < (int)(maps_s.size()-1) ))
 	{

@@ -74,6 +74,15 @@ int main() {
   	map_waypoints_dy.push_back(d_y);
   }
 
+  LOGD("map_waypoints_s size %d\n",map_waypoints_s.size());
+  LOGD("map_waypoints_x size %d\n",map_waypoints_x.size());
+  LOGD("map_waypoints_y size %d\n",map_waypoints_y.size());
+
+  if(map_waypoints_s.size()==0)
+  {
+    LOGD("ERROR: READING highway data has some issues");
+  }
+
   double ref_vel = 0;
   double max_vel = 49.0;
   int state = KEEP_GOING;
